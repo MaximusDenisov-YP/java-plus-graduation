@@ -12,9 +12,9 @@
 
 	<name>Explore With Me</name>
 	<modules>
-		<module>ewm-main</module>
-		<module>ewm-stats</module>
 		<module>infra</module>
+		<module>core</module>
+		<module>ewm-stats</module>
 	</modules>
 
 	<groupId>ru.practicum</groupId>
@@ -27,10 +27,18 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.34</lombok.version>
 		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<spring-cloud-dependencies.version>2023.0.3</spring-cloud-dependencies.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>

@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: ewm_main_service_route
+          uri: lb://ewm-main
+          predicates:
+            - Path=/events/**,/categories/**,/compilations/**,/users/**,/admin/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.gateway.route: DEBUG
