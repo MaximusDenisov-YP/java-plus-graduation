@@ -6,7 +6,7 @@ spring:
     gateway:
       routes:
         - id: ewm_main_service_route
-          uri: lb://ewm-main
+          uri: lb://main-service
           predicates:
             - Path=/events/**,/categories/**,/compilations/**,/users/**,/admin/**
 

@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ewm-stats-service</artifactId>
+    <artifactId>stats-server</artifactId>
 
     <dependencies>
         <dependency>
