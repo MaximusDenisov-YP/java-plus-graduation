@@ -13,7 +13,7 @@ import ru.practicum.ewm.stats.client.StatisticsServiceImpl;
 @Slf4j
 public class StatsClientConfig {
 
-    @Value("${stats-server.service-id:EWM-STATS-SERVICE}")
+    @Value("${stats-server.service-id:STATS-SERVER}")
     private String statsServerId;
 
     @Bean

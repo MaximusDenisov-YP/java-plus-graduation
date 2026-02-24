@@ -27,7 +27,7 @@ services:
     restart: on-failure
 
   ewm-service:
-    build: ./ewm-main
+    build: ./core/ewm-main
     image: ewm-main-image
     container_name: ewm-main-container
     ports:
