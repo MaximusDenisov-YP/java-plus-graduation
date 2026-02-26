@@ -19,7 +19,22 @@
 
     <modules>
         <module>ewm-main</module>
+        <module>events-service</module>
+        <module>users-service</module>
+        <module>requests-service</module>
+        <module>extra-service</module>
+        <module>contracts</module>
     </modules>
+
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-starter-openfeign</artifactId>-->
+<!--                <version>5.0.0</version>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <build>
         <plugins>
