@@ -79,7 +79,7 @@ public class EventServiceImpl implements EventService {
         }
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").descending());
 
-        Page<Event> eventsPage = eventRepository.findAllByInitiator_Id(userId, pageable);
+        Page<Event> eventsPage = eventRepository.findAllByInitiatorId(userId, pageable);
         if (eventsPage.hasContent()) {
             List<Long> eventIds = eventsPage.getContent().stream()
                     .map(Event::getId)

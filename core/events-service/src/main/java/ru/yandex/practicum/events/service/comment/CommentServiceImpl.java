@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.contracts.dto.comment.CommentDto;
 import ru.yandex.practicum.contracts.dto.comment.CreateCommentDto;
+import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 import ru.yandex.practicum.contracts.exception.CommentNotExistException;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
 import ru.yandex.practicum.contracts.feign.users.UsersClient;
@@ -19,7 +20,9 @@ import ru.yandex.practicum.events.repository.CommentRepository;
 import ru.yandex.practicum.events.repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -33,11 +36,10 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getEventComments(Long eventId, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size, Sort.by("id").descending());
         Page<Comment> comments = commentRepository.findAllByEventId(eventId, pageable);
-
-        return comments.getContent()
-                .stream()
-                .map(commentMapper::toCommentDto)
-                .toList();
+        Map<Long, UserShortDto> ownersByIds = getUserShortDtoMapWithIds(comments.getContent());
+        return comments.stream()
+                .map(c -> commentMapper.toCommentDto(c, ownersByIds.get(c.getOwnerId())
+                        .getName())).toList();
     }
 
     @Override
@@ -54,9 +56,9 @@ public class CommentServiceImpl implements CommentService {
         commentFromDto.setEvent(event);
         commentFromDto.setOwnerId(userId);
         commentFromDto.setCreated(LocalDateTime.now());
-
+        UserShortDto user = usersClient.getUserShort(userId);
         Comment comment = commentRepository.save(commentFromDto);
-        return commentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(comment, user.getName());
     }
 
     @Override
@@ -67,7 +69,8 @@ public class CommentServiceImpl implements CommentService {
                         "Does not exist comment with Id " + commentId + " for user with id " + userId));
 
         comment.setText(createCommentDto.getText());
-        return commentMapper.toCommentDto(commentRepository.save(comment));
+        UserShortDto user = usersClient.getUserShort(userId);
+        return commentMapper.toCommentDto(commentRepository.save(comment), user.getName());
     }
 
     @Override
@@ -79,8 +82,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> findCommentByText(String text) {
         List<Comment> allByTextIsLikeIgnoreCase = commentRepository.findAllByTextIsLikeIgnoreCase(text);
+        Map<Long, UserShortDto> usersWithIds = getUserShortDtoMapWithIds(allByTextIsLikeIgnoreCase);
         return allByTextIsLikeIgnoreCase.stream()
-                .map(commentMapper::toCommentDto)
+                .map(comment ->
+                        commentMapper.toCommentDto(comment, usersWithIds.get(comment.getOwnerId()).getName()))
                 .toList();
     }
 
@@ -88,7 +93,16 @@ public class CommentServiceImpl implements CommentService {
     public CommentDto getCommentById(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("комментарий не найден"));
-        return commentMapper.toCommentDto(comment);
+        UserShortDto user = usersClient.getUserShort(comment.getOwnerId());
+        return commentMapper.toCommentDto(comment, user.getName());
+    }
+
+    private Map<Long, UserShortDto> getUserShortDtoMapWithIds(List<Comment> comments) {
+        List<Long> commentsUsersIds = comments.stream().map(Comment::getOwnerId).distinct().toList();
+        Map<Long, UserShortDto> ownersByIds = new HashMap<>();
+        usersClient.getUsersShort(commentsUsersIds)
+                .forEach(user -> ownersByIds.put(user.getId(), user));
+        return ownersByIds;
     }
 
 }

@@ -29,7 +29,7 @@ public interface EventMapper {
     @Mapping(target = "requestModeration", source = "newEventDto.requestModeration", defaultExpression = "java(true)")
     @Mapping(target = "eventDate", expression = "java(parseDate(newEventDto.getEventDate()))")
     @Mapping(target = "location", source = "location")
-    @Mapping(target = "categoryId", source = "newEventDto.categoryId", defaultExpression = "java(0)")
+    @Mapping(target = "categoryId", source = "newEventDto.category")
 //    Event toEvent(NewEventDto newEventDto, Category category, User initiator,
 //                  ru.practicum.ewm.main.dto.event.LocationDto location);
     Event toEvent(NewEventDto newEventDto, Long initiatorId, LocationDto location);

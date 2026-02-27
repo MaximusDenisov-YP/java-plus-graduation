@@ -11,10 +11,9 @@ import ru.yandex.practicum.events.entity.Event;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
-    Page<Event> findAllByInitiator_Id(Long userId, Pageable pageable);
+    Page<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
     Optional<Event> findByIdAndInitiatorId(Long eventId, Long userId);
 
