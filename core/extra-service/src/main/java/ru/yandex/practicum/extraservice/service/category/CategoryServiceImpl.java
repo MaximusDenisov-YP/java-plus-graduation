@@ -99,4 +99,9 @@ public class CategoryServiceImpl implements CategoryService {
     public boolean categoryExists(Long id) {
         return categoryRepository.existsById(id);
     }
+
+    @Override
+    public List<CategoryDto> getCategoriesByIds(List<Long> ids) {
+        return categoryRepository.findByIdIn(ids).stream().map(categoryMapper::toCategoryDto).toList();
+    }
 }

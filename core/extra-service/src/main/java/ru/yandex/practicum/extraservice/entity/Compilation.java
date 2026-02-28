@@ -2,13 +2,10 @@ package ru.yandex.practicum.extraservice.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -33,11 +30,11 @@ public class Compilation {
     private Boolean pinned;
 
     @ElementCollection
-//    @ManyToMany
     @CollectionTable(
             name = "compilation_events",
             joinColumns = @JoinColumn(name = "compilation_id")
     )
+    @Column(name = "event_id", nullable = false)
     @Builder.Default
     private Set<Long> events = new HashSet<>();
 

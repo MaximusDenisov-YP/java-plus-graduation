@@ -5,10 +5,26 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: ewm_main_service_route
-          uri: lb://main-service
+        - id: events_service_route
+          uri: lb://events-service
           predicates:
-            - Path=/events/**,/categories/**,/compilations/**,/users/**,/admin/**
+#           - Path=/events/** , /admin/events/**, /*/events/**, /*/comments/**, /users/*/events/**
+           - Path=/events/**, /admin/events/**, /*/events/**, /*/comments, /*/comments/**, /comments/**, /users/*/events/**
+
+        - id: users_service_route
+          uri: lb://users-service
+          predicates:
+           - Path=/admin/users/**
+
+        - id: extra_service_route
+          uri: lb://extra-service
+          predicates:
+           - Path=/compilations/**, /categories/**, /admin/categories/**, /admin/compilations/**
+
+        - id: requests_service_route
+          uri: lb://requests-service
+          predicates:
+           - Path=/users/{userId}/requests/**
 
 logging:
   level:

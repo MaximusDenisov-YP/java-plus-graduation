@@ -48,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new CommentNotExistException("Not possible create Comment - " +
                         "Does not exist Event with Id " + eventId));
-        if (!usersClient.userExists(userId)) {
+        if (usersClient.userExists(userId)) {
             throw new CommentNotExistException("Not possible create Comment - " + "Does not exist User with Id " + userId);
         }
         Comment commentFromDto = commentMapper.toComment(createCommentDto);

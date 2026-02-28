@@ -8,7 +8,6 @@ import ru.yandex.practicum.events.entity.Comment;
 
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
-    // TODO: Передавать ownerName в параметры метода
     @Mapping(source = "name", target = "ownerName")
     @Mapping(source = "comment.event.id", target = "event")
     CommentDto toCommentDto(Comment comment, String name);

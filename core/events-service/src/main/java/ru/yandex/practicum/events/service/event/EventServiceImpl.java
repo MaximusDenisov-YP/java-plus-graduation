@@ -15,7 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.stats.client.StatisticsService;
+import ru.yandex.practicum.contracts.dto.category.CategoryDto;
 import ru.yandex.practicum.contracts.dto.event.*;
+import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 import ru.yandex.practicum.contracts.enums.EventState;
 import ru.yandex.practicum.contracts.enums.SortValue;
 import ru.yandex.practicum.contracts.exception.*;
@@ -27,8 +29,10 @@ import ru.yandex.practicum.events.mapper.EventMapper;
 import ru.yandex.practicum.events.repository.EventRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.time.LocalDateTime.parse;
@@ -61,15 +65,21 @@ public class EventServiceImpl implements EventService {
             throw new CategoryNotExistException("Category with id=" + newEventDto.getCategory() + " was not found");
         }
 
-        LocalDateTime eventDate = parse(newEventDto.getEventDate());
+        log.info("createEvent newEventDto-> " + newEventDto);
+        DateTimeFormatter spaceFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime eventDate = parse(newEventDto.getEventDate(), spaceFmt);
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new WrongTimeException("Event date must be at least 2 hours from now" + eventDate);
         }
 
+
         Event event = eventMapper.toEvent(newEventDto, userId, newEventDto.getLocation());
         Event savedEvent = eventRepository.save(event);
 
-        return eventMapper.toEventFullDto(savedEvent);
+        UserShortDto userShortDto = usersClient.getUserShort(userId);
+        CategoryDto categoryDto = categoryClient.getCategory(savedEvent.getCategoryId());
+
+        return eventMapper.toEventFullDto(savedEvent, userShortDto, categoryDto);
     }
 
     @Override
@@ -98,6 +108,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
+        log.info("Вызван updateEventByUser. На вход пришёл updateEventUserDto = {}", updateEventUserDto);
         Event event = eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new EventNotExistException("Event with id=" + eventId + " was not found"));
 
@@ -106,7 +117,9 @@ public class EventServiceImpl implements EventService {
         }
 
         if (updateEventUserDto == null) {
-            return eventMapper.toEventFullDto(event);
+            UserShortDto userShortDto = usersClient.getUserShort(userId);
+            CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
+            return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
         }
 
         updateEventFieldsFromUserDto(event, updateEventUserDto);
@@ -119,7 +132,9 @@ public class EventServiceImpl implements EventService {
         }
 
         Event updatedEvent = eventRepository.save(event);
-        return eventMapper.toEventFullDto(updatedEvent);
+        UserShortDto userShortDto = usersClient.getUserShort(userId);
+        CategoryDto categoryDto = categoryClient.getCategory(updatedEvent.getCategoryId());
+        return eventMapper.toEventFullDto(updatedEvent, userShortDto, categoryDto);
     }
 
     @Override
@@ -130,7 +145,9 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> viewsMap = statisticsService.getEventsViews(List.of(eventId), null, false);
         event.setViews(viewsMap.getOrDefault(eventId, 0L));
 
-        return eventMapper.toEventFullDto(event);
+        UserShortDto userShortDto = usersClient.getUserShort(userId);
+        CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
+        return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
     }
 
     @Override
@@ -140,7 +157,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new EventNotExistException("Event with id=" + eventId + " was not found"));
 
         if (updateEventAdminDto == null) {
-            return eventMapper.toEventFullDto(event);
+            UserShortDto userShortDto = usersClient.getUserShort(event.getInitiatorId());
+            CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
+            return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
         }
 
         updateEventFieldsFromAdminDTO(event, updateEventAdminDto);
@@ -170,7 +189,9 @@ public class EventServiceImpl implements EventService {
         }
 
         Event updatedEvent = eventRepository.save(event);
-        return eventMapper.toEventFullDto(updatedEvent);
+        UserShortDto userShortDto = usersClient.getUserShort(event.getInitiatorId());
+        CategoryDto categoryDto = categoryClient.getCategory(updatedEvent.getCategoryId());
+        return eventMapper.toEventFullDto(updatedEvent, userShortDto, categoryDto);
     }
 
     @Override
@@ -197,7 +218,10 @@ public class EventServiceImpl implements EventService {
             event = eventRepository.save(event);
         }
 
-        return eventMapper.toEventFullDto(event);
+        UserShortDto userShortDto = usersClient.getUserShort(event.getInitiatorId());
+        CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
+
+        return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
     }
 
     @Override
@@ -230,10 +254,25 @@ public class EventServiceImpl implements EventService {
 
         Map<Long, Long> viewsMap = statisticsService.getEventsViews(eventIds, null, false);
         events.forEach(event -> event.setViews(viewsMap.getOrDefault(event.getId(), 0L)));
+        return getEventsFullDtoList(events);
+    }
+
+    private List<EventFullDto> getEventsFullDtoList(List<Event> events) {
+        List<Long> usersIds = events.stream().map(Event::getInitiatorId).toList();
+        List<Long> categorysIds = events.stream().map(Event::getCategoryId).toList();
+        List<CategoryDto> categoryDtos = categoryClient.getCategoriesByIds(categorysIds);
+        List<UserShortDto> userShortDtos = usersClient.getUsersShort(usersIds);
+        Map<Long, UserShortDto> usersById = userShortDtos.stream()
+                .collect(Collectors.toMap(UserShortDto::getId, Function.identity()));
+        Map<Long, CategoryDto> categoriesById = categoryDtos.stream()
+                .collect(Collectors.toMap(CategoryDto::getId, Function.identity()));
 
         return events.stream()
-                .map(eventMapper::toEventFullDto)
-                .collect(Collectors.toList());
+                .map(event -> eventMapper.toEventFullDto(
+                        event,
+                        usersById.get(event.getInitiatorId()),
+                        categoriesById.get(event.getCategoryId())
+                )).toList();
     }
 
     @Override
@@ -278,23 +317,24 @@ public class EventServiceImpl implements EventService {
                     .collect(Collectors.toList());
         }
 
-        return events.stream()
-                .map(eventMapper::toEventFullDto)
-                .collect(Collectors.toList());
+        return getEventsFullDtoList(events);
     }
 
     @Override
     public EventFullDto getEventById(Long eventId) {
-        return eventMapper.toEventFullDto(eventRepository.findById(eventId)
-                .orElseThrow(() -> new EventNotExistException("Event with id=" + eventId + " was not found")));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotExistException("Event with id=" + eventId + " was not found"));
+
+        UserShortDto userShortDto = usersClient.getUserShort(event.getInitiatorId());
+        CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
+
+        return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
     }
 
     @Override
     public List<EventFullDto> getTopEvent(int count) {
         List<Event> topEvents = eventRepository.getTopByComments(count);
-        return topEvents.stream()
-                .map(eventMapper::toEventFullDto)
-                .collect(Collectors.toList());
+        return getEventsFullDtoList(topEvents);
     }
 
     @Override
@@ -304,7 +344,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventFullDto> getEventsByIds(Set<Long> ids) {
-        return eventRepository.findAllById(ids).stream().map(eventMapper::toEventFullDto).toList();
+        List<Event> events = eventRepository.findAllById(ids);
+        return getEventsFullDtoList(events);
     }
 
     private void updateEventFieldsFromUserDto(Event event, UpdateEventUserDto dto) {
@@ -314,7 +355,7 @@ public class EventServiceImpl implements EventService {
 
         if (dto.getCategory() != null) {
             Long categoryId = dto.getCategory();
-            if (!categoryClient.categoryExists(categoryId)) {
+            if (categoryClient.categoryExists(categoryId)) {
                 throw new CategoryNotExistException("Category with id=" + dto.getCategory() + " was not found");
             }
             event.setCategoryId(categoryId);
@@ -363,7 +404,7 @@ public class EventServiceImpl implements EventService {
 
         if (dto.getCategory() != null) {
             Long categoryId = dto.getCategory();
-            if (!categoryClient.categoryExists(categoryId)) {
+            if (categoryClient.categoryExists(categoryId)) {
                 throw new CategoryNotExistException("Category with id=" + dto.getCategory() + " was not found");
             }
             event.setCategoryId(categoryId);
@@ -458,7 +499,7 @@ public class EventServiceImpl implements EventService {
         }
 
         if (hasCategories(request.getCategories())) {
-            Predicate categoryFilter = root.get("category").get("id").in(request.getCategories());
+            Predicate categoryFilter = root.get("categoryId").in(request.getCategories());
             predicates.add(categoryFilter);
         }
 

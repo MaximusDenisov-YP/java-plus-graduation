@@ -9,13 +9,13 @@ import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 
 import java.util.List;
 
-@FeignClient(name = "user-service", path = "/internal")
+@FeignClient(name = "users-service", path = "/internal")
 public interface UsersClient {
     @PostMapping("/users/short")
     List<UserShortDto> getUsersShort(@RequestBody List<Long> ids);
 
     @GetMapping("/users/{userId}")
-    UserShortDto getUserShort(@PathVariable("userId") Long userId);
+    UserShortDto getUserShort(@PathVariable Long userId);
 
     @GetMapping("/users/{userId}/exists")
     boolean userExists(@PathVariable("userId") Long userId);

@@ -19,4 +19,6 @@ public interface CategoryService {
     CategoryDto updateCategory(Long id, UpdateCategoryDto updateCategoryDto);
 
     boolean categoryExists(Long id);
+
+    List<CategoryDto> getCategoriesByIds(List<Long> ids);
 }

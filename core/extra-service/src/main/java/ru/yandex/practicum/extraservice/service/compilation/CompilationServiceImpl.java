@@ -96,14 +96,4 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationMapper.toCompilationDto(updatedCompilation, eventFullDtos);
     }
 
-    // TODO: Вот здесь надо получить List<Long> eventIds из eventsClient и использовать в методах выше
-//    private Set<Long> getEventsFromIds(Set<Long> eventIds) {
-//        if (eventIds == null || eventIds.isEmpty()) {
-//            return new HashSet<>();
-//        }
-//        return eventIds.stream()
-//                .map(eventsClient::getEventById)
-//                .collect(Collectors.toCollection(ArrayList::new));
-//    }
-
 }

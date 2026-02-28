@@ -7,4 +7,6 @@ import ru.yandex.practicum.usersservice.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsByEmail(String email);
+
+    boolean existsById(Long userId);
 }

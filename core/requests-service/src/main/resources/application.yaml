@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: users-service
+    name: requests-service
   config:
     import: "configserver:"
   cloud:

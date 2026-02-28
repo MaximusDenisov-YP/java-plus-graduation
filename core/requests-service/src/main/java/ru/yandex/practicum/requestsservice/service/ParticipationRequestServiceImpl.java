@@ -37,7 +37,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     public List<ParticipationRequest> getUserRequests(Long userId) {
-        if (!usersClient.userExists(userId)) {
+        if (usersClient.userExists(userId)) {
             throw new NotFoundException("User with id=%d was not found".formatted(userId));
         }
         return requestRepository.findByRequesterId(userId);
@@ -45,7 +45,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     public ParticipationRequest addRequest(Long userId, Long eventId) {
-        if (!usersClient.userExists(userId)) {
+        if (usersClient.userExists(userId)) {
             throw new NotFoundException("User with id=%d was not found".formatted(userId));
         }
 

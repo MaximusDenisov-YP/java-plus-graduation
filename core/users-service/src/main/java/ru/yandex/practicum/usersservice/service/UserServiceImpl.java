@@ -1,6 +1,7 @@
 package ru.yandex.practicum.usersservice.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -86,6 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userExists(Long id) {
-        return repository.existsById(id);
+        boolean userExists = repository.existsById(id);
+        log.info("Вызван userExists. Пользователь с ID = {} существует? = {}", id, userExists);
+        return userExists;
     }
 }

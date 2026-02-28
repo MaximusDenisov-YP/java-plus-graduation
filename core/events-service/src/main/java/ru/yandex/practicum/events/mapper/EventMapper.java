@@ -2,10 +2,12 @@ package ru.yandex.practicum.events.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.yandex.practicum.contracts.dto.category.CategoryDto;
 import ru.yandex.practicum.contracts.dto.event.EventFullDto;
 import ru.yandex.practicum.contracts.dto.event.EventShortDto;
 import ru.yandex.practicum.contracts.dto.event.LocationDto;
 import ru.yandex.practicum.contracts.dto.event.NewEventDto;
+import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 import ru.yandex.practicum.contracts.enums.EventState;
 import ru.yandex.practicum.contracts.util.DateFormatter;
 import ru.yandex.practicum.events.entity.Event;
@@ -17,8 +19,6 @@ import java.time.LocalDateTime;
         imports = {LocalDateTime.class, EventState.class})
 public interface EventMapper {
 
-
-    //TODO: Разобраться, как заставить работать маппер, вообще надо просто работать с IDшниками, без JPA.
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdOn", expression = "java(LocalDateTime.now())")
     @Mapping(target = "state", constant = "PENDING")
@@ -38,7 +38,8 @@ public interface EventMapper {
     @Mapping(target = "createdOn", expression = "java(formatDate(event.getCreatedOn()))")
     @Mapping(target = "publishedOn", expression = "java(formatDate(event.getPublishedOn()))")
     @Mapping(target = "state", expression = "java(event.getState().name())")
-    EventFullDto toEventFullDto(Event event);
+    @Mapping(target = "id", source = "event.id")
+    EventFullDto toEventFullDto(Event event, UserShortDto initiator, CategoryDto category);
 
     @Mapping(target = "eventDate", expression = "java(formatDate(event.getEventDate()))")
     EventShortDto toEventShortDto(Event event);
