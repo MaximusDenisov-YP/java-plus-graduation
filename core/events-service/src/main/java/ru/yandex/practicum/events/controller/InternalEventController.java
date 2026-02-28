@@ -3,6 +3,7 @@ package ru.yandex.practicum.events.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.contracts.dto.event.EventFullDto;
+import ru.yandex.practicum.contracts.dto.event.UpdateEventAdminDto;
 import ru.yandex.practicum.events.service.event.EventService;
 
 import java.util.List;
@@ -20,6 +21,11 @@ public class InternalEventController {
         return eventService.eventExists(eventId);
     }
 
+    @GetMapping("/event/exists")
+    public boolean existsByCategoryId(@RequestParam Long categoryId) {
+        return eventService.existsByCategoryId(categoryId);
+    }
+
     @GetMapping("/event/{eventId}")
     public EventFullDto getEventById(@PathVariable("eventId") Long eventId) {
         return eventService.getEventById(eventId);
@@ -30,4 +36,8 @@ public class InternalEventController {
         return eventService.getEventsByIds(ids);
     }
 
+    @PutMapping("/admin/events/{eventId}")
+    public EventFullDto updateAdminEvent(@PathVariable("eventId") long eventId, @RequestBody UpdateEventAdminDto dto) {
+        return eventService.updateEvent(eventId, dto);
+    }
 }

@@ -50,6 +50,7 @@ public class EventServiceImpl implements EventService {
     private final StatisticsService statisticsService;
     private final EntityManager entityManager;
     private final EventMapper eventMapper;
+    private final DateTimeFormatter spaceFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final Map<String, Set<Long>> viewCache = new ConcurrentHashMap<>();
 
@@ -66,12 +67,11 @@ public class EventServiceImpl implements EventService {
         }
 
         log.info("createEvent newEventDto-> " + newEventDto);
-        DateTimeFormatter spaceFmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime eventDate = parse(newEventDto.getEventDate(), spaceFmt);
+
+        LocalDateTime eventDate = parse(newEventDto.getEventDate(), spaceFormat);
         if (eventDate.isBefore(LocalDateTime.now().plusHours(2))) {
             throw new WrongTimeException("Event date must be at least 2 hours from now" + eventDate);
         }
-
 
         Event event = eventMapper.toEvent(newEventDto, userId, newEventDto.getLocation());
         Event savedEvent = eventRepository.save(event);
@@ -227,8 +227,8 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional(readOnly = true)
     public List<EventFullDto> getEventsWithParamsByAdmin(AdminEventSearchRequest request) {
-        LocalDateTime start = request.getRangeStart() != null ? parse(request.getRangeStart()) : null;
-        LocalDateTime end = request.getRangeEnd() != null ? parse(request.getRangeEnd()) : null;
+        LocalDateTime start = request.getRangeStart() != null ? parse(request.getRangeStart(), spaceFormat) : null;
+        LocalDateTime end = request.getRangeEnd() != null ? parse(request.getRangeEnd(), spaceFormat) : null;
 
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Event> query = builder.createQuery(Event.class);
@@ -279,15 +279,15 @@ public class EventServiceImpl implements EventService {
     public List<EventFullDto> getEventsWithParamsByUser(PublicEventSearchRequest request,
                                                         HttpServletRequest httpRequest) {
         if (request.getRangeStart() != null && request.getRangeEnd() != null) {
-            LocalDateTime start = parse(request.getRangeStart());
-            LocalDateTime end = parse(request.getRangeEnd());
+            LocalDateTime start = parse(request.getRangeStart(), spaceFormat);
+            LocalDateTime end = parse(request.getRangeEnd(), spaceFormat);
             if (start.isAfter(end)) {
                 throw new ValidationException("Range start cannot be after range end");
             }
         }
 
-        LocalDateTime start = request.getRangeStart() != null ? parse(request.getRangeStart()) : null;
-        LocalDateTime end = request.getRangeEnd() != null ? parse(request.getRangeEnd()) : null;
+        LocalDateTime start = request.getRangeStart() != null ? parse(request.getRangeStart(), spaceFormat) : null;
+        LocalDateTime end = request.getRangeEnd() != null ? parse(request.getRangeEnd(), spaceFormat) : null;
 
         List<Event> events = findPublicEvents(request, start, end);
         if (isOnlyAvailable(request.getOnlyAvailable())) {
@@ -327,7 +327,6 @@ public class EventServiceImpl implements EventService {
 
         UserShortDto userShortDto = usersClient.getUserShort(event.getInitiatorId());
         CategoryDto categoryDto = categoryClient.getCategory(event.getCategoryId());
-
         return eventMapper.toEventFullDto(event, userShortDto, categoryDto);
     }
 
@@ -340,6 +339,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public boolean eventExists(Long eventId) {
         return eventRepository.existsById(eventId);
+    }
+
+    @Override
+    public boolean existsByCategoryId(Long categoryId) {
+        return eventRepository.existsByCategoryId(categoryId);
     }
 
     @Override
@@ -366,7 +370,7 @@ public class EventServiceImpl implements EventService {
         }
 
         if (dto.getEventDate() != null) {
-            LocalDateTime newEventDate = parse(dto.getEventDate());
+            LocalDateTime newEventDate = parse(dto.getEventDate(), spaceFormat);
             if (newEventDate.isBefore(LocalDateTime.now().plusHours(2))) {
                 throw new WrongTimeException("Event date must be at least 2 hours from now" + newEventDate);
             }
@@ -402,9 +406,13 @@ public class EventServiceImpl implements EventService {
             event.setAnnotation(dto.getAnnotation());
         }
 
+        if (dto.getConfirmedRequests() != null) {
+            event.setConfirmedRequests(dto.getConfirmedRequests());
+        }
+
         if (dto.getCategory() != null) {
             Long categoryId = dto.getCategory();
-            if (categoryClient.categoryExists(categoryId)) {
+            if (!categoryClient.categoryExists(categoryId)) {
                 throw new CategoryNotExistException("Category with id=" + dto.getCategory() + " was not found");
             }
             event.setCategoryId(categoryId);
@@ -415,7 +423,7 @@ public class EventServiceImpl implements EventService {
         }
 
         if (dto.getEventDate() != null) {
-            LocalDateTime newEventDate = parse(dto.getEventDate());
+            LocalDateTime newEventDate = parse(dto.getEventDate(), spaceFormat);
             if (event.getPublishedOn() != null && newEventDate.isBefore(event.getPublishedOn().plusHours(1))) {
                 throw new WrongTimeException("Event date must be at least 1 hour after publication" + newEventDate);
             }
@@ -455,12 +463,12 @@ public class EventServiceImpl implements EventService {
         List<Predicate> predicates = new ArrayList<>();
 
         if (hasCategories(request.getCategories())) {
-            Predicate categoryFilter = root.get("category").get("id").in(request.getCategories());
+            Predicate categoryFilter = root.get("categoryId").in(request.getCategories());
             predicates.add(categoryFilter);
         }
 
         if (hasUsers(request.getUsers())) {
-            Predicate userFilter = root.get("initiator").get("id").in(request.getUsers());
+            Predicate userFilter = root.get("initiatorId").in(request.getUsers());
             predicates.add(userFilter);
         }
 

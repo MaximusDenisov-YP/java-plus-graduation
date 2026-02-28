@@ -26,7 +26,6 @@ public class EventFullDto {
     @NotNull
     private CategoryDto category;
 
-
     private Long confirmedRequests;
 
     private String description;
@@ -34,7 +33,6 @@ public class EventFullDto {
     @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN)
     private String eventDate;
-
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = PATTERN)
     private String createdOn;

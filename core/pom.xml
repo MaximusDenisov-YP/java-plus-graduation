@@ -18,7 +18,6 @@
     </properties>
 
     <modules>
-        <module>ewm-main</module>
         <module>events-service</module>
         <module>users-service</module>
         <module>requests-service</module>

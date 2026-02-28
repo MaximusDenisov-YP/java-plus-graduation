@@ -33,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CategoryNotExistException("Category with id=" + id + " was not found");
         }
 
-        if (eventsClient.eventExists(id)) {
+        if (eventsClient.existsByCategoryId(id)) {
             throw new ConflictException("Cannot delete category with id=" + id + " because it has linked events");
         }
 

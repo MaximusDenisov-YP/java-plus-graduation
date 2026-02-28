@@ -20,15 +20,7 @@ public class ParticipationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "event_id")
-//    private Event event;
-
     private Long eventId;
-
-//    @ManyToOne
-//    @JoinColumn(name = "requester_id")
-//    private User requester;
 
     private Long requesterId;
 

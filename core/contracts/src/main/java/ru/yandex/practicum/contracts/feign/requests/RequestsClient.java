@@ -11,7 +11,7 @@ import ru.yandex.practicum.contracts.dto.request.UpdateParticipationRequestDto;
 
 import java.util.List;
 
-@FeignClient(name = "requests-service")
+@FeignClient(name = "requests-service", path = "/internal")
 public interface RequestsClient {
 
     @GetMapping("/users/{userId}/event/{eventId}")

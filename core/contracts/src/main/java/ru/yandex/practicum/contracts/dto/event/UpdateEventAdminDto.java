@@ -21,6 +21,7 @@ public class UpdateEventAdminDto {
     private String eventDate;
     private LocationDto location;
     private Boolean paid;
+    private Long confirmedRequests;
 
     @Positive
     private Integer participantLimit;

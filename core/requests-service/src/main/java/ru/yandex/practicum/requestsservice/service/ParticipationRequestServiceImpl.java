@@ -37,7 +37,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     public List<ParticipationRequest> getUserRequests(Long userId) {
-        if (usersClient.userExists(userId)) {
+        if (!usersClient.userExists(userId)) {
             throw new NotFoundException("User with id=%d was not found".formatted(userId));
         }
         return requestRepository.findByRequesterId(userId);
@@ -45,7 +45,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
 
     @Transactional
     public ParticipationRequest addRequest(Long userId, Long eventId) {
-        if (usersClient.userExists(userId)) {
+        if (!usersClient.userExists(userId)) {
             throw new NotFoundException("User with id=%d was not found".formatted(userId));
         }
 
@@ -60,7 +60,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             throw new ConflictException("Initiator cannot request own event");
         }
 
-        if (event.getState().equals(EventState.PUBLISHED.toString())) {
+        if (!event.getState().equals(EventState.PUBLISHED.toString())) {
             throw new ConflictException("Event is not published");
         }
 
@@ -81,6 +81,12 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
         } else {
             request.setStatus(RequestStatus.CONFIRMED);
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+            eventsClient.updateAdminEvent(
+                    event.getId(),
+                    UpdateEventAdminDto.builder()
+                            .confirmedRequests(event.getConfirmedRequests())
+                            .build()
+            );
         }
 
         return requestRepository.save(request);
@@ -217,6 +223,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
                 .eventDate(eventFullDto.getEventDate())
                 .location(eventFullDto.getLocation())
                 .paid(eventFullDto.getPaid())
+                .confirmedRequests(eventFullDto.getConfirmedRequests())
                 .participantLimit(eventFullDto.getParticipantLimit())
                 .requestModeration(eventFullDto.getRequestModeration())
                 .title(eventFullDto.getTitle())

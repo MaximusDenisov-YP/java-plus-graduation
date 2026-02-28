@@ -11,13 +11,16 @@ import java.util.Set;
 @FeignClient(name = "events-service", path = "/internal")
 public interface EventsClient {
 
-    @PatchMapping("/admin/events/{eventId}")
+    @PutMapping("/admin/events/{eventId}")
     EventFullDto updateAdminEvent(@PathVariable("eventId") long eventId, @RequestBody UpdateEventAdminDto dto);
 
     // --- Internal endpoints (чтобы не было N+1) ---
 
     @GetMapping("/event/{eventId}/exists")
     boolean eventExists(@PathVariable("eventId") Long eventId);
+
+    @GetMapping("/event/exists")
+    boolean existsByCategoryId(@RequestParam Long categoryId);
 
     @GetMapping("/event/{eventId}")
     EventFullDto getEventById(@PathVariable("eventId") Long eventId);

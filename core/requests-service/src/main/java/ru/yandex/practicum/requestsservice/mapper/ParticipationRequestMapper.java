@@ -10,8 +10,8 @@ import ru.yandex.practicum.requestsservice.entity.ParticipationRequest;
 public interface ParticipationRequestMapper {
 
     @Mapping(target = "created", expression = "java(formatDate(request.getCreated()))")
-//    @Mapping(target = "requester", source = "requester.id")
-//    @Mapping(target = "event", source = "event.id")
+    @Mapping(target = "requester", source = "requesterId")
+    @Mapping(target = "event", source = "eventId")
     ParticipationRequestDto toDto(ParticipationRequest request);
 
     default String formatDate(java.time.LocalDateTime dateTime) {
