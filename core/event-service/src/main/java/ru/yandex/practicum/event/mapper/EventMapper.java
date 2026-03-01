@@ -15,7 +15,6 @@ import ru.yandex.practicum.event.entity.Event;
 import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring",
-//        uses = {CategoryMapper.class, UserMapper.class, LocationMapper.class},
         imports = {LocalDateTime.class, EventState.class})
 public interface EventMapper {
 
@@ -30,8 +29,6 @@ public interface EventMapper {
     @Mapping(target = "eventDate", expression = "java(parseDate(newEventDto.getEventDate()))")
     @Mapping(target = "location", source = "location")
     @Mapping(target = "categoryId", source = "newEventDto.category")
-//    Event toEvent(NewEventDto newEventDto, Category category, User initiator,
-//                  ru.practicum.ewm.main.dto.event.LocationDto location);
     Event toEvent(NewEventDto newEventDto, Long initiatorId, LocationDto location);
 
     @Mapping(target = "eventDate", expression = "java(formatDate(event.getEventDate()))")
@@ -52,16 +49,4 @@ public interface EventMapper {
         return DateFormatter.parse(dateString);
     }
 
-//    @AfterMapping
-//    default void setDefaultValues(@MappingTarget Event.EventBuilder eventBuilder, NewEventDto newEventDto) {
-//        if (newEventDto.getPaid() == null) {
-//            eventBuilder.paid(false);
-//        }
-//        if (newEventDto.getParticipantLimit() == null) {
-//            eventBuilder.participantLimit(0);
-//        }
-//        if (newEventDto.getRequestModeration() == null) {
-//            eventBuilder.requestModeration(true);
-//        }
-//    }
 }

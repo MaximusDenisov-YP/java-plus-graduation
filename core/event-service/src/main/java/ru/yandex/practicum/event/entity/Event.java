@@ -23,10 +23,6 @@ public class Event {
     @Column(name = "annotation", length = 2000, nullable = false)
     private String annotation;
 
-//    @ManyToOne
-//    @JoinColumn(name = "category_id", nullable = false)
-//    private Category category;
-
     @Column(name = "category_id", nullable = false)
     private Long categoryId;
 
@@ -43,19 +39,12 @@ public class Event {
     @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 
-//    @ManyToOne
-//    @JoinColumn(name = "initiator_id", nullable = false)
-//    private User initiator;
-
     @Column(name = "initiator_id", nullable = false)
     private Long initiatorId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
-
-//    @Column(name = "location_id", nullable = false)
-//    private Long locationId;
 
     @Column(name = "paid", nullable = false)
     @Builder.Default
