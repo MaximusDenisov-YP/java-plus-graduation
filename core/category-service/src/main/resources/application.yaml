@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: extra-service
+    name: category-service
   config:
     import: "configserver:"
   cloud:

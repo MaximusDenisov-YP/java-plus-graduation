@@ -17,7 +17,7 @@ spring:
            - Path=/admin/users/**
 
         - id: extra_service_route
-          uri: lb://extra-service
+          uri: lb://category-service
           predicates:
            - Path=/compilations/**, /categories/**, /admin/categories/**, /admin/compilations/**
 

@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import ru.yandex.practicum.contracts.feign.category.CategoryClient;
 
 @FeignClient(
-        name = "extra-service",
+        name = "category-service",
         path = "/internal",
         fallbackFactory = CategoryClientFallbackFactory.class
 )

@@ -9,7 +9,7 @@ import ru.yandex.practicum.contracts.dto.category.CategoryDto;
 
 import java.util.List;
 
-@FeignClient(name = "extra-service", path = "/internal")
+@FeignClient(name = "category-service", path = "/internal")
 public interface CategoryClient {
     @GetMapping("/category/{categoryId}")
     CategoryDto getCategory(@PathVariable("categoryId") Long categoryId);
