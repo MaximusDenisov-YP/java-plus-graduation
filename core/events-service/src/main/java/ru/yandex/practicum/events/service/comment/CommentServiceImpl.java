@@ -12,9 +12,9 @@ import ru.yandex.practicum.contracts.dto.comment.CreateCommentDto;
 import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 import ru.yandex.practicum.contracts.exception.CommentNotExistException;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
-import ru.yandex.practicum.contracts.feign.users.UsersClient;
 import ru.yandex.practicum.events.entity.Comment;
 import ru.yandex.practicum.events.entity.Event;
+import ru.yandex.practicum.events.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.events.mapper.CommentMapper;
 import ru.yandex.practicum.events.repository.CommentRepository;
 import ru.yandex.practicum.events.repository.EventRepository;
@@ -29,7 +29,7 @@ import java.util.Map;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final EventRepository eventRepository;
-    private final UsersClient usersClient;
+    private final UsersClientWithFallback usersClient;
     private final CommentMapper commentMapper;
 
     @Override

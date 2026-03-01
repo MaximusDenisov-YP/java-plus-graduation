@@ -21,10 +21,10 @@ import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 import ru.yandex.practicum.contracts.enums.EventState;
 import ru.yandex.practicum.contracts.enums.SortValue;
 import ru.yandex.practicum.contracts.exception.*;
-import ru.yandex.practicum.contracts.feign.category.CategoryClient;
-import ru.yandex.practicum.contracts.feign.users.UsersClient;
 import ru.yandex.practicum.events.entity.Event;
 import ru.yandex.practicum.events.entity.Location;
+import ru.yandex.practicum.events.fallback.category.CategoryClientWithFallback;
+import ru.yandex.practicum.events.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.events.mapper.EventMapper;
 import ru.yandex.practicum.events.repository.EventRepository;
 
@@ -45,8 +45,8 @@ import static ru.yandex.practicum.contracts.util.SearchValidators.*;
 public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
-    private final UsersClient usersClient;
-    private final CategoryClient categoryClient;
+    private final UsersClientWithFallback usersClient;
+    private final CategoryClientWithFallback categoryClient;
     private final StatisticsService statisticsService;
     private final EntityManager entityManager;
     private final EventMapper eventMapper;

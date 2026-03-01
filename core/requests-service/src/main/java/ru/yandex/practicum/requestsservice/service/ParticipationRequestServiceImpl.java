@@ -15,9 +15,9 @@ import ru.yandex.practicum.contracts.enums.RequestStatus;
 import ru.yandex.practicum.contracts.exception.ConflictException;
 import ru.yandex.practicum.contracts.exception.ForbiddenException;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
-import ru.yandex.practicum.contracts.feign.events.EventsClient;
-import ru.yandex.practicum.contracts.feign.users.UsersClient;
 import ru.yandex.practicum.requestsservice.entity.ParticipationRequest;
+import ru.yandex.practicum.requestsservice.fallback.event.EventsClientWithFallback;
+import ru.yandex.practicum.requestsservice.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.requestsservice.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.requestsservice.repository.ParticipationRequestRepository;
 
@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ParticipationRequestServiceImpl implements ParticipationRequestService {
 
-    private final UsersClient usersClient;
-    private final EventsClient eventsClient;
+    private final UsersClientWithFallback usersClient;
+    private final EventsClientWithFallback eventsClient;
     private final ParticipationRequestRepository requestRepository;
     private final ParticipationRequestMapper participationRequestMapper;
 

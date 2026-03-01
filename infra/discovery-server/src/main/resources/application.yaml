@@ -7,5 +7,7 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+    registryFetchIntervalSeconds: 5
+    initialInstanceInfoReplicationIntervalSeconds: 5
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

@@ -1,9 +1,11 @@
 package ru.yandex.practicum.usersservice.handler;
 
+import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -213,6 +215,42 @@ public class ErrorHandler {
                 e.getMessage(),
                 stackTrace
         );
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ApiError> handleFeignException(FeignException e) {
+        int status = e.status();
+        HttpStatus httpStatus = HttpStatus.resolve(status);
+
+        if (httpStatus == null || status < 0) { // status=-1 при сетевых проблемах
+            ApiError body = new ApiError(
+                    HttpStatus.BAD_GATEWAY.value(),
+                    "Upstream service error",
+                    "Upstream service is unavailable or returned an invalid response",
+                    getStackTrace(e)
+            );
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(body);
+        }
+
+        ApiError body = new ApiError(
+                httpStatus.value(),
+                httpStatus.is4xxClientError()
+                        ? "Request conflict."
+                        : "Upstream service error",
+                extractUpstreamMessageOrFallback(e),
+                getStackTrace(e)
+        );
+
+        return ResponseEntity.status(httpStatus).body(body);
+    }
+
+    private String extractUpstreamMessageOrFallback(FeignException e) {
+        try {
+            String body = e.contentUTF8();
+            return (body != null && !body.isBlank()) ? body : e.getMessage();
+        } catch (Exception ignore) {
+            return e.getMessage();
+        }
     }
 
     private String getStackTrace(Exception e) {

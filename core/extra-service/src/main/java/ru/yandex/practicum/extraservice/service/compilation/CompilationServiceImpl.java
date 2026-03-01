@@ -11,8 +11,8 @@ import ru.yandex.practicum.contracts.dto.compilation.NewCompilationDto;
 import ru.yandex.practicum.contracts.dto.compilation.UpdateCompilationRequest;
 import ru.yandex.practicum.contracts.dto.event.EventFullDto;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
-import ru.yandex.practicum.contracts.feign.events.EventsClient;
 import ru.yandex.practicum.extraservice.entity.Compilation;
+import ru.yandex.practicum.extraservice.fallback.event.EventsClientWithFallback;
 import ru.yandex.practicum.extraservice.mapper.CompilationMapper;
 import ru.yandex.practicum.extraservice.repository.CompilationRepository;
 
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
-    private final EventsClient eventsClient;
+    private final EventsClientWithFallback eventsClient;
     private final CompilationMapper compilationMapper;
 
     @Override

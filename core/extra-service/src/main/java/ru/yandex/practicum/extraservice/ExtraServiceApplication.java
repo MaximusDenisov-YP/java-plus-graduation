@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@EnableFeignClients(basePackages = {"ru.yandex.practicum.contracts"})
+@EnableFeignClients(basePackages = {"ru.yandex.practicum.extraservice.fallback"})
 @SpringBootApplication
 public class ExtraServiceApplication {
 

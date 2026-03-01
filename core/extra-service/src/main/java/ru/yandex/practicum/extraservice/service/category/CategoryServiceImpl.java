@@ -13,8 +13,8 @@ import ru.yandex.practicum.contracts.dto.category.NewCategoryDto;
 import ru.yandex.practicum.contracts.dto.category.UpdateCategoryDto;
 import ru.yandex.practicum.contracts.exception.CategoryNotExistException;
 import ru.yandex.practicum.contracts.exception.ConflictException;
-import ru.yandex.practicum.contracts.feign.events.EventsClient;
 import ru.yandex.practicum.extraservice.entity.Category;
+import ru.yandex.practicum.extraservice.fallback.event.EventsClientWithFallback;
 import ru.yandex.practicum.extraservice.mapper.CategoryMapper;
 import ru.yandex.practicum.extraservice.repository.CategoryRepository;
 
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-    private final EventsClient eventsClient;
+    private final EventsClientWithFallback eventsClient;
     private final CategoryMapper categoryMapper;
 
     @Override

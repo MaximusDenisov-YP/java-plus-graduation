@@ -222,7 +222,7 @@ public class ErrorHandler {
         int status = e.status();
         HttpStatus httpStatus = HttpStatus.resolve(status);
 
-        if (httpStatus == null || status < 0) { // status=-1 при сетевых проблемах
+        if (httpStatus == null || status < 0) {
             ApiError body = new ApiError(
                     HttpStatus.BAD_GATEWAY.value(),
                     "Upstream service error",
