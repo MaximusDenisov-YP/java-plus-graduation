@@ -8,7 +8,7 @@ import ru.yandex.practicum.contracts.dto.event.UpdateEventAdminDto;
 import java.util.List;
 import java.util.Set;
 
-@FeignClient(name = "events-service", path = "/internal")
+@FeignClient(name = "event-service", path = "/internal")
 public interface EventsClient {
 
     @PutMapping("/admin/events/{eventId}")

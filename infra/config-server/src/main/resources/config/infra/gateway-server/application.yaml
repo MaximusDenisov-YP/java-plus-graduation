@@ -5,14 +5,14 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: events_service_route
-          uri: lb://events-service
+        - id: event_service_route
+          uri: lb://event-service
           predicates:
 #           - Path=/events/** , /admin/events/**, /*/events/**, /*/comments/**, /users/*/events/**
            - Path=/events/**, /admin/events/**, /*/events/**, /*/comments, /*/comments/**, /comments/**, /users/*/events/**
 
-        - id: users_service_route
-          uri: lb://users-service
+        - id: user_service_route
+          uri: lb://user-service
           predicates:
            - Path=/admin/users/**
 
@@ -21,8 +21,8 @@ spring:
           predicates:
            - Path=/compilations/**, /categories/**, /admin/categories/**, /admin/compilations/**
 
-        - id: requests_service_route
-          uri: lb://requests-service
+        - id: request_service_route
+          uri: lb://request-service
           predicates:
            - Path=/users/{userId}/requests/**
 

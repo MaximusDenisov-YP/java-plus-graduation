@@ -1,0 +1,16 @@
+package ru.yandex.practicum.event.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.yandex.practicum.contracts.dto.comment.CommentDto;
+import ru.yandex.practicum.contracts.dto.comment.CreateCommentDto;
+import ru.yandex.practicum.event.entity.Comment;
+
+@Mapper(componentModel = "spring")
+public interface CommentMapper {
+    @Mapping(source = "name", target = "ownerName")
+    @Mapping(source = "comment.event.id", target = "event")
+    CommentDto toCommentDto(Comment comment, String name);
+
+    Comment toComment(CreateCommentDto createCommentDto);
+}

@@ -9,7 +9,7 @@ import ru.yandex.practicum.contracts.dto.user.UserShortDto;
 
 import java.util.List;
 
-@FeignClient(name = "users-service", path = "/internal")
+@FeignClient(name = "user-service", path = "/internal")
 public interface UsersClient {
     @PostMapping("/users/short")
     List<UserShortDto> getUsersShort(@RequestBody List<Long> ids);

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.extraservice.fallback.event;
+package ru.yandex.practicum.requestservice.fallback.event;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import ru.yandex.practicum.contracts.feign.events.EventsClient;

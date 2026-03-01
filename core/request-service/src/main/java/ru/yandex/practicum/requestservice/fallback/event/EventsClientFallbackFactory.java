@@ -1,13 +1,13 @@
-package ru.yandex.practicum.extraservice.fallback.event;
+package ru.yandex.practicum.requestservice.fallback.event;
 
 import feign.FeignException;
-import ru.yandex.practicum.contracts.exception.ServiceUnavailableException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.cloud.openfeign.FallbackFactory;
 import ru.yandex.practicum.contracts.dto.event.EventFullDto;
 import ru.yandex.practicum.contracts.dto.event.UpdateEventAdminDto;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
+import ru.yandex.practicum.contracts.exception.ServiceUnavailableException;
 
 import java.util.List;
 import java.util.Set;
