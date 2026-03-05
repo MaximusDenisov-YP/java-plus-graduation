@@ -18,7 +18,11 @@
     </properties>
 
     <modules>
-        <module>ewm-main</module>
+        <module>event-service</module>
+        <module>user-service</module>
+        <module>request-service</module>
+        <module>category-service</module>
+        <module>contracts</module>
     </modules>
 
     <build>

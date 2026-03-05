@@ -1,60 +1,72 @@
 services:
-  stats-server:
-    build: ./ewm-stats/ewm-stats-service
-    image: ewm-stats-server-image
-    container_name: ewm-stats-server-container
-    ports:
-      - "9090:9090"
-    depends_on:
-      - stats-db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
-      - SPRING_DATASOURCE_USERNAME=dbuser
-      - SPRING_DATASOURCE_PASSWORD=12345
-    restart: on-failure
-
   stats-db:
     image: postgres:16.1
     container_name: ewm-stats-service-db-container
     ports:
       - "5431:5432"
     environment:
-      - POSTGRES_DB=ewm-stats
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=12345
+      POSTGRES_DB: ewm-stats
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: 12345
     volumes:
       - stats_data:/var/lib/postgresql/data
     restart: on-failure
 
-  ewm-service:
-    build: ./core/ewm-main
-    image: ewm-main-image
-    container_name: ewm-main-container
+  events-db:
+    image: postgres:16.1
+    container_name: events-db
     ports:
-      - "8080:8080"
-    depends_on:
-      - ewm-db
-      - stats-server
+      - "5434:5432"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
-      - SPRING_DATASOURCE_USERNAME=dbuser
-      - SPRING_DATASOURCE_PASSWORD=12345
-      - STATS_SERVER_URL=http://stats-server:9090
+      POSTGRES_DB: events-db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - events_data:/var/lib/postgresql/data
     restart: on-failure
 
-  ewm-db:
+  users-db:
     image: postgres:16.1
-    container_name: ewm-main-db
+    container_name: users-db
     ports:
-      - "5433:5432"
+      - "5435:5432"
     environment:
-      - POSTGRES_DB=ewm-main
-      - POSTGRES_USER=dbuser
-      - POSTGRES_PASSWORD=12345
+      POSTGRES_DB: users-db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: 12345
     volumes:
-      - ewm_data:/var/lib/postgresql/data
+      - users_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  requests-db:
+    image: postgres:16.1
+    container_name: requests-db
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_DB: requests-db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - requests_data:/var/lib/postgresql/data
+    restart: on-failure
+
+  extra-db:
+    image: postgres:16.1
+    container_name: extra-db
+    ports:
+      - "5437:5432"
+    environment:
+      POSTGRES_DB: extra-db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - extra_data:/var/lib/postgresql/data
     restart: on-failure
 
 volumes:
   stats_data:
-  ewm_data:
+  events_data:
+  users_data:
+  requests_data:
+  extra_data:
