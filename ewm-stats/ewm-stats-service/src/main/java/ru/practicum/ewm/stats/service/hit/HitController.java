@@ -1,15 +1,15 @@
-package ru.practicum.ewm.stats.service.hit;
+package ru.yandex.practicum.ewm.stats.service.hit;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.practicum.ewm.stats.dto.CreateHitDto;
-import ru.practicum.ewm.stats.dto.GetStatsDto;
-import ru.practicum.ewm.stats.dto.HitDto;
-import ru.practicum.ewm.stats.dto.ViewStats;
-import ru.practicum.ewm.stats.service.hit.service.HitService;
+import ru.yandex.practicum.ewm.stats.dto.CreateHitDto;
+import ru.yandex.practicum.ewm.stats.dto.GetStatsDto;
+import ru.yandex.practicum.ewm.stats.dto.HitDto;
+import ru.yandex.practicum.ewm.stats.dto.ViewStats;
+import ru.yandex.practicum.ewm.stats.service.hit.service.HitService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

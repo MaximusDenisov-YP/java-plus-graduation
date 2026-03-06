@@ -1,10 +1,10 @@
-package ru.practicum.ewm.stats.service.hit.repository;
+package ru.yandex.practicum.ewm.stats.service.hit.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.ewm.stats.dto.ViewStats;
-import ru.practicum.ewm.stats.service.hit.model.Hit;
+import ru.yandex.practicum.ewm.stats.dto.ViewStats;
+import ru.yandex.practicum.ewm.stats.service.hit.model.Hit;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 public interface HitRepository extends JpaRepository<Hit, Long> {
 
     @Query(value = """
-        SELECT new ru.practicum.ewm.stats.dto.ViewStats(h.app, h.uri, COUNT(DISTINCT h.ip))
+        SELECT new ru.yandex.practicum.ewm.stats.dto.ViewStats(h.app, h.uri, COUNT(DISTINCT h.ip))
         FROM Hit h
         WHERE h.timestamp BETWEEN :start AND :end
           AND (:uris IS NULL OR h.uri IN :uris)
@@ -26,7 +26,7 @@ public interface HitRepository extends JpaRepository<Hit, Long> {
     );
 
     @Query(value = """
-        SELECT new ru.practicum.ewm.stats.dto.ViewStats(h.app, h.uri, COUNT(h))
+        SELECT new ru.yandex.practicum.ewm.stats.dto.ViewStats(h.app, h.uri, COUNT(h))
         FROM Hit h
         WHERE h.timestamp BETWEEN :start AND :end
           AND (:uris IS NULL OR h.uri IN :uris)

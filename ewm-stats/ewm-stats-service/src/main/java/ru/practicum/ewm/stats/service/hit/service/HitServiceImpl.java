@@ -1,15 +1,15 @@
-package ru.practicum.ewm.stats.service.hit.service;
+package ru.yandex.practicum.ewm.stats.service.hit.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.stats.dto.GetStatsDto;
-import ru.practicum.ewm.stats.dto.HitDto;
-import ru.practicum.ewm.stats.dto.CreateHitDto;
-import ru.practicum.ewm.stats.dto.ViewStats;
-import ru.practicum.ewm.stats.service.hit.mapper.HitMapper;
-import ru.practicum.ewm.stats.service.hit.model.Hit;
-import ru.practicum.ewm.stats.service.hit.repository.HitRepository;
+import ru.yandex.practicum.ewm.stats.dto.GetStatsDto;
+import ru.yandex.practicum.ewm.stats.dto.HitDto;
+import ru.yandex.practicum.ewm.stats.dto.CreateHitDto;
+import ru.yandex.practicum.ewm.stats.dto.ViewStats;
+import ru.yandex.practicum.ewm.stats.service.hit.mapper.HitMapper;
+import ru.yandex.practicum.ewm.stats.service.hit.model.Hit;
+import ru.yandex.practicum.ewm.stats.service.hit.repository.HitRepository;
 
 import java.util.List;
 

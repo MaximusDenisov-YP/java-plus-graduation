@@ -6,8 +6,8 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.ewm.stats.client.StatisticsService;
-import ru.practicum.ewm.stats.client.StatisticsServiceImpl;
+import ru.yandex.practicum.ewm.stats.client.StatisticsService;
+import ru.yandex.practicum.ewm.stats.client.StatisticsServiceImpl;
 
 @Configuration
 @Slf4j

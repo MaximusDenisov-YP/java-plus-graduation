@@ -1,4 +1,4 @@
-package ru.practicum.ewm.stats.service;
+package ru.yandex.practicum.ewm.stats.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

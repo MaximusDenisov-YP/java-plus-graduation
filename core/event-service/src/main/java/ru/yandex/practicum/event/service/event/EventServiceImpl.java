@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.stats.client.StatisticsService;
+import ru.yandex.practicum.ewm.stats.client.StatisticsService;
 import ru.yandex.practicum.contracts.dto.category.CategoryDto;
 import ru.yandex.practicum.contracts.dto.event.*;
 import ru.yandex.practicum.contracts.dto.user.UserShortDto;

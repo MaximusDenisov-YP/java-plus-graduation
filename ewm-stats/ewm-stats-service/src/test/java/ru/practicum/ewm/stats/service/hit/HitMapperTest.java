@@ -1,11 +1,11 @@
-package ru.practicum.ewm.stats.service.hit;
+package ru.yandex.practicum.ewm.stats.service.hit;
 
 
 import org.junit.jupiter.api.Test;
-import ru.practicum.ewm.stats.dto.CreateHitDto;
-import ru.practicum.ewm.stats.dto.HitDto;
-import ru.practicum.ewm.stats.service.hit.mapper.HitMapper;
-import ru.practicum.ewm.stats.service.hit.model.Hit;
+import ru.yandex.practicum.ewm.stats.dto.CreateHitDto;
+import ru.yandex.practicum.ewm.stats.dto.HitDto;
+import ru.yandex.practicum.ewm.stats.service.hit.mapper.HitMapper;
+import ru.yandex.practicum.ewm.stats.service.hit.model.Hit;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

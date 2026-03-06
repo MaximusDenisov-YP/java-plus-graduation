@@ -67,12 +67,12 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.practicum</groupId>
+			<groupId>ru.yandex.practicum</groupId>
 			<artifactId>ewm-stats-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>ru.practicum</groupId>
+			<groupId>ru.yandex.practicum</groupId>
 			<artifactId>ewm-stats-dto</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>

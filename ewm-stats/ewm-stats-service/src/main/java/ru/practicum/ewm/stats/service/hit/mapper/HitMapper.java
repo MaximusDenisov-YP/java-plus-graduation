@@ -1,8 +1,8 @@
-package ru.practicum.ewm.stats.service.hit.mapper;
+package ru.yandex.practicum.ewm.stats.service.hit.mapper;
 
-import ru.practicum.ewm.stats.dto.CreateHitDto;
-import ru.practicum.ewm.stats.dto.HitDto;
-import ru.practicum.ewm.stats.service.hit.model.Hit;
+import ru.yandex.practicum.ewm.stats.dto.CreateHitDto;
+import ru.yandex.practicum.ewm.stats.dto.HitDto;
+import ru.yandex.practicum.ewm.stats.service.hit.model.Hit;
 
 public class HitMapper {
     public static Hit toHit(CreateHitDto endPointHitCreateDto) {

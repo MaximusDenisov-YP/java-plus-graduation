@@ -1,4 +1,4 @@
-package ru.practicum.ewm.stats.service.hit.model;
+package ru.yandex.practicum.ewm.stats.service.hit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
