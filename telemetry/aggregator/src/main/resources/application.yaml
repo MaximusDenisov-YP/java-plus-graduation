@@ -1,0 +1,20 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: aggregator
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: aggregator-group
+      auto-offset-reset: earliest
+    producer:
+      client-id: aggregator-producer
+
+aggregator:
+  kafka:
+    topic:
+      user-actions: stats.user-actions.v1
+      event-similarity: stats.events-similarity.v1
