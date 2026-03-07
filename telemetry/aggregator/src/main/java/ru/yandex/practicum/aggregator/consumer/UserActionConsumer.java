@@ -16,7 +16,7 @@ public class UserActionConsumer {
 
     @KafkaListener(
             topics = "${aggregator.kafka.topic.user-actions}",
-            groupId = "${spring.kafka.consumer.group-id}"
+            containerFactory = "userActionKafkaListenerContainerFactory"
     )
     public void consume(UserActionAvro action) {
         log.info("Received action from Kafka: userId={}, eventId={}, actionType={}",
