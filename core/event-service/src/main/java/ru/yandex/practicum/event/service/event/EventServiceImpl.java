@@ -25,10 +25,10 @@ import ru.yandex.practicum.event.fallback.category.CategoryClientWithFallback;
 import ru.yandex.practicum.event.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.event.mapper.EventMapper;
 import ru.yandex.practicum.event.repository.EventRepository;
-import ru.yandex.practicum.ewm.stats.client.analyzer.AnalyzerClient;
-import ru.yandex.practicum.ewm.stats.client.collector.CollectorClient;
 import ru.yandex.practicum.stats.service.collector.ActionTypeProto;
 import ru.yandex.practicum.stats.service.dashboard.RecommendedEventProto;
+import ru.yandex.practicum.statsclient.client.analyzer.AnalyzerClient;
+import ru.yandex.practicum.statsclient.client.collector.CollectorClient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

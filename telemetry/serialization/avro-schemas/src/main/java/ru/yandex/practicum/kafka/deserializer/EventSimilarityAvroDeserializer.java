@@ -1,6 +1,6 @@
 package ru.yandex.practicum.kafka.deserializer;
 
-import ru.yandex.practicum.ewm.stats.avro.EventSimilarityAvro;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
 
 public class EventSimilarityAvroDeserializer extends BaseAvroDeserializer<EventSimilarityAvro> {
 

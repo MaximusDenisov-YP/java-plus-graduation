@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "UserActionAvro",
-  "namespace": "ru.yandex.practicum.ewm.stats.avro",
+  "namespace": "ru.practicum.ewm.stats.avro",
   "fields": [
     { "name": "userId", "type": "long" },
     { "name": "eventId", "type": "long" },

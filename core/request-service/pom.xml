@@ -49,7 +49,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ru.yandex.practicum</groupId>
-			<artifactId>ewm-stats-client</artifactId>
+			<artifactId>stats-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

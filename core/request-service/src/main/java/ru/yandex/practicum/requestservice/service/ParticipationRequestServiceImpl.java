@@ -17,13 +17,13 @@ import ru.yandex.practicum.contracts.enums.RequestStatus;
 import ru.yandex.practicum.contracts.exception.ConflictException;
 import ru.yandex.practicum.contracts.exception.ForbiddenException;
 import ru.yandex.practicum.contracts.exception.NotFoundException;
-import ru.yandex.practicum.ewm.stats.client.collector.CollectorClient;
 import ru.yandex.practicum.requestservice.entity.ParticipationRequest;
 import ru.yandex.practicum.requestservice.fallback.event.EventsClientWithFallback;
 import ru.yandex.practicum.requestservice.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.requestservice.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.requestservice.repository.ParticipationRequestRepository;
 import ru.yandex.practicum.stats.service.collector.ActionTypeProto;
+import ru.yandex.practicum.statsclient.client.collector.CollectorClient;
 
 import java.time.LocalDateTime;
 import java.util.List;

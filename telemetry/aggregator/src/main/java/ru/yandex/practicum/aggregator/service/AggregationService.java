@@ -5,8 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.aggregator.model.EventPair;
 import ru.yandex.practicum.aggregator.util.ActionWeightResolver;
-import ru.yandex.practicum.ewm.stats.avro.EventSimilarityAvro;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.EventSimilarityAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 
 import java.util.HashMap;
 import java.util.Map;

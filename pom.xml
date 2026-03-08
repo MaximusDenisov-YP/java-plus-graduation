@@ -14,7 +14,6 @@
 	<modules>
 		<module>infra</module>
 		<module>core</module>
-		<module>ewm-stats</module>
 		<module>telemetry</module>
 	</modules>
 

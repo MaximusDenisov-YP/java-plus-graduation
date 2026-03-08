@@ -3,8 +3,8 @@ package ru.yandex.practicum.collector.mapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.stats.service.collector.ActionTypeProto;
 import ru.yandex.practicum.stats.service.collector.UserActionProto;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
-import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.ActionTypeAvro;
 
 import java.time.Instant;
 

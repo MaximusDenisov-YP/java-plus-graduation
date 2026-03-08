@@ -1,7 +1,7 @@
 package ru.yandex.practicum.aggregator.util;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.ewm.stats.avro.ActionTypeAvro;
+import ru.practicum.ewm.stats.avro.ActionTypeAvro;
 
 @Component
 public class ActionWeightResolver {

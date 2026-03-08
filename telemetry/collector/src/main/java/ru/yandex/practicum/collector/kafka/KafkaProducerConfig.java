@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 
 import java.util.HashMap;
 import java.util.Map;

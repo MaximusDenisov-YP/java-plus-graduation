@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import ru.yandex.practicum.collector.mapper.UserActionMapper;
 import ru.yandex.practicum.collector.service.UserActionProducer;
-import ru.yandex.practicum.ewm.stats.avro.UserActionAvro;
+import ru.practicum.ewm.stats.avro.UserActionAvro;
 import ru.yandex.practicum.stats.service.collector.UserActionControllerGrpc;
 import ru.yandex.practicum.stats.service.collector.UserActionProto;
 
