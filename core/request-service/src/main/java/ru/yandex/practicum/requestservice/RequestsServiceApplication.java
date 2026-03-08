@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @EnableFeignClients(basePackages = {"ru.yandex.practicum.requestservice.fallback"})
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "ru.yandex.practicum")
 public class RequestsServiceApplication {
 
 	public static void main(String[] args) {

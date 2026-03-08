@@ -22,7 +22,6 @@ public interface EventMapper {
     @Mapping(target = "createdOn", expression = "java(LocalDateTime.now())")
     @Mapping(target = "state", constant = "PENDING")
     @Mapping(target = "confirmedRequests", constant = "0L")
-    @Mapping(target = "views", constant = "0L")
     @Mapping(target = "paid", source = "newEventDto.paid", defaultExpression = "java(false)")
     @Mapping(target = "participantLimit", source = "newEventDto.participantLimit", defaultExpression = "java(0)")
     @Mapping(target = "requestModeration", source = "newEventDto.requestModeration", defaultExpression = "java(true)")
@@ -31,6 +30,7 @@ public interface EventMapper {
     @Mapping(target = "categoryId", source = "newEventDto.category")
     Event toEvent(NewEventDto newEventDto, Long initiatorId, LocationDto location);
 
+    @Mapping(target = "rating", ignore = true)
     @Mapping(target = "eventDate", expression = "java(formatDate(event.getEventDate()))")
     @Mapping(target = "createdOn", expression = "java(formatDate(event.getCreatedOn()))")
     @Mapping(target = "publishedOn", expression = "java(formatDate(event.getPublishedOn()))")
@@ -38,6 +38,9 @@ public interface EventMapper {
     @Mapping(target = "id", source = "event.id")
     EventFullDto toEventFullDto(Event event, UserShortDto initiator, CategoryDto category);
 
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "initiator", ignore = true)
+    @Mapping(target = "rating", ignore = true)
     @Mapping(target = "eventDate", expression = "java(formatDate(event.getEventDate()))")
     EventShortDto toEventShortDto(Event event);
 

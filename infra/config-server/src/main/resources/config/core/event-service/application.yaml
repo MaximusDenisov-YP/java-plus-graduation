@@ -27,3 +27,16 @@ spring:
     url: jdbc:postgresql://localhost:5434/events-db
     username: dbuser
     password: 12345
+
+grpc:
+  client:
+    collector:
+      address: discovery:///COLLECTOR
+      negotiationType: plaintext
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+    analyzer:
+      address: discovery:///ANALYZER
+      negotiationType: plaintext
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true

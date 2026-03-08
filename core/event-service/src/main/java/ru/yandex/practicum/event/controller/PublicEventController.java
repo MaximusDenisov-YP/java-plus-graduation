@@ -1,6 +1,5 @@
 package ru.yandex.practicum.event.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,18 +27,40 @@ public class PublicEventController {
             @RequestParam(name = "onlyAvailable", required = false) Boolean onlyAvailable,
             @RequestParam(name = "sort", required = false) SortValue sort,
             @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
-            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
-            HttpServletRequest request) {
+            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
 
         PublicEventSearchRequest searchRequest = PublicEventSearchRequest.fromParams(
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
 
-        return eventService.getEventsWithParamsByUser(searchRequest, request);
+        return eventService.getEventsWithParamsByUser(searchRequest);
     }
 
     @GetMapping("/{id}")
     public EventFullDto getEvent(@PathVariable Long id,
-                                 HttpServletRequest request) {
-        return eventService.getEvent(id, request);
+                                 @RequestHeader("X-EWM-USER-ID") long userId) {
+        return eventService.getEvent(id, userId);
+    }
+
+    @PutMapping("/{eventId}/like")
+    public void likeEvent(@PathVariable long eventId,
+                          @RequestHeader("X-EWM-USER-ID") long userId) {
+        eventService.likeEvent(userId, eventId);
+    }
+
+    @GetMapping("/recommendations")
+    public List<EventFullDto> getRecommendations(
+            @RequestHeader("X-EWM-USER-ID") long userId,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return eventService.getRecommendations(userId, size);
+    }
+
+    @GetMapping("/{eventId}/similar")
+    public List<EventFullDto> getSimilarEvents(
+            @PathVariable long eventId,
+            @RequestHeader("X-EWM-USER-ID") long userId,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        return eventService.getSimilarEvents(eventId, userId, size);
     }
 }
