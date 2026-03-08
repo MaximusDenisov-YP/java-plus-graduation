@@ -1,35 +1,47 @@
 package ru.yandex.practicum.kafka.serializer;
 
-import org.apache.avro.io.BinaryEncoder;
-import org.apache.avro.io.DatumWriter;
-import org.apache.avro.io.EncoderFactory;
-import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecordBase;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 
 public class GeneralAvroSerializer implements Serializer<SpecificRecordBase> {
 
-    private final EncoderFactory encoderFactory = EncoderFactory.get();
-    private BinaryEncoder encoder;
-
     @Override
     public byte[] serialize(final String topic, final SpecificRecordBase data) {
-        try (final ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            if (data != null) {
-                final DatumWriter<SpecificRecordBase> writer = new SpecificDatumWriter<>(data.getSchema());
+        if (data == null) {
+            return null;
+        }
 
-                encoder = encoderFactory.binaryEncoder(out, encoder);
+        try {
+            Method toByteBufferMethod = data.getClass().getMethod("toByteBuffer");
+            ByteBuffer buffer = (ByteBuffer) toByteBufferMethod.invoke(data);
 
-                writer.write(data, encoder);
-                encoder.flush();
-            }
-            return out.toByteArray();
-        } catch (IOException ex) {
-            throw new SerializationException("Ошибка сериализации данных для топика [" + topic + "]", ex);
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            return bytes;
+
+        } catch (NoSuchMethodException e) {
+            throw new SerializationException(
+                    "Класс " + data.getClass().getName()
+                            + " не поддерживает Avro single-object encoding для топика [" + topic + "]",
+                    e
+            );
+        } catch (IllegalAccessException e) {
+            throw new SerializationException(
+                    "Нет доступа к методу toByteBuffer() для топика [" + topic + "]",
+                    e
+            );
+        } catch (InvocationTargetException e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
+            throw new SerializationException(
+                    "Ошибка сериализации данных для топика [" + topic + "]",
+                    cause instanceof IOException ? cause : e
+            );
         }
     }
 }
