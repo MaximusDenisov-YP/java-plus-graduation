@@ -1,6 +1,5 @@
 package ru.yandex.practicum.event.service.event;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ru.yandex.practicum.contracts.dto.event.*;
 
 import java.util.List;
@@ -18,11 +17,11 @@ public interface EventService {
 
     EventFullDto updateEvent(Long eventId, UpdateEventAdminDto updateEventAdminDto);
 
-    EventFullDto getEvent(Long id, HttpServletRequest request);
+    EventFullDto getEvent(Long eventId, Long userId);
 
     List<EventFullDto> getEventsWithParamsByAdmin(AdminEventSearchRequest request);
 
-    List<EventFullDto> getEventsWithParamsByUser(PublicEventSearchRequest request, HttpServletRequest httpRequest);
+    List<EventFullDto> getEventsWithParamsByUser(PublicEventSearchRequest request);
 
     EventFullDto getEventById(Long eventId);
 
@@ -33,4 +32,10 @@ public interface EventService {
     boolean existsByCategoryId(Long categoryId);
 
     List<EventFullDto> getEventsByIds(Set<Long> ids);
+
+    void likeEvent(long userId, long eventId);
+
+    List<EventFullDto> getRecommendations(long userId, int size);
+
+    List<EventFullDto> getSimilarEvents(long eventId, long userId, int size);
 }

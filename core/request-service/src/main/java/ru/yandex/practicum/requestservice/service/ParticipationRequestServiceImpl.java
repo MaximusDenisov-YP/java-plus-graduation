@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import ru.yandex.practicum.contracts.dto.event.EventFullDto;
 import ru.yandex.practicum.contracts.dto.event.UpdateEventAdminDto;
 import ru.yandex.practicum.contracts.dto.event.UpdateParticipationRequestListDto;
@@ -20,6 +22,8 @@ import ru.yandex.practicum.requestservice.fallback.event.EventsClientWithFallbac
 import ru.yandex.practicum.requestservice.fallback.users.UsersClientWithFallback;
 import ru.yandex.practicum.requestservice.mapper.ParticipationRequestMapper;
 import ru.yandex.practicum.requestservice.repository.ParticipationRequestRepository;
+import ru.yandex.practicum.stats.service.collector.ActionTypeProto;
+import ru.yandex.practicum.statsclient.client.collector.CollectorClient;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +38,7 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
     private final EventsClientWithFallback eventsClient;
     private final ParticipationRequestRepository requestRepository;
     private final ParticipationRequestMapper participationRequestMapper;
+    private final CollectorClient collectorClient;
 
     @Transactional
     public List<ParticipationRequest> getUserRequests(Long userId) {
@@ -89,7 +94,15 @@ public class ParticipationRequestServiceImpl implements ParticipationRequestServ
             );
         }
 
-        return requestRepository.save(request);
+        ParticipationRequest saved = requestRepository.save(request);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                collectorClient.sendAction(userId, eventId, ActionTypeProto.ACTION_REGISTER);
+                log.info("Произошла отправка в Kafka ACTION_REGISTER userId={}, eventId={}, requestId={}", userId, eventId, saved.getId());
+            }
+        });
+        return saved;
     }
 
     @Transactional

@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: analyzer
+  config:
+    import: "configserver:"
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        max-attempts: 30
+        initial-interval: 1000
+        multiplier: 1.5
+        max-interval: 6000
+        use-random-policy: true
+      discovery:
+        enabled: true
+        serviceId: config-server
+  datasource:
+    url: jdbc:postgresql://localhost:5431/ewm-stats
+    username: dbuser
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: analyzer-group
+      auto-offset-reset: earliest
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    preferIpAddress: true
+    hostname: localhost
+    instance-id: "${spring.application.name}:${random.value}"
+    leaseRenewalIntervalInSeconds: 10
+    metadata-map:
+      grpc.port: "${grpc.server.port}"

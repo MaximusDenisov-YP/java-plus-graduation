@@ -67,13 +67,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.practicum</groupId>
-			<artifactId>ewm-stats-client</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>ru.practicum</groupId>
-			<artifactId>ewm-stats-dto</artifactId>
+			<groupId>ru.yandex.practicum</groupId>
+			<artifactId>stats-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
         <dependency>
