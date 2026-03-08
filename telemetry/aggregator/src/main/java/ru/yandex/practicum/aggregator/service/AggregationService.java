@@ -67,7 +67,7 @@ public class AggregationService {
                 continue;
             }
 
-            double similarity = minSum / (sumA * sumB);
+            double similarity = minSum / Math.sqrt(sumA * sumB);
 
             EventSimilarityAvro similarityAvro = EventSimilarityAvro.newBuilder()
                     .setEventA(pair.eventA())
@@ -75,6 +75,17 @@ public class AggregationService {
                     .setScore(similarity)
                     .setTimestamp(action.getTimestamp())
                     .build();
+
+            log.info("pair=({}, {}), oldWeight={}, newWeight={}, otherWeight={}, sumA={}, sumB={}, minSum={}, similarity={}",
+                    pair.eventA(),
+                    pair.eventB(),
+                    oldWeight,
+                    newWeight,
+                    otherWeight,
+                    sumA,
+                    sumB,
+                    minSum,
+                    similarity);
 
             similarityProducer.send(similarityAvro);
         }
