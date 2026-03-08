@@ -18,9 +18,7 @@ public class SimilarityProducer {
     private String topic;
 
     public void send(EventSimilarityAvro similarity) {
-        String key = similarity.getEventA() + "-" + similarity.getEventB();
-
-        kafkaTemplate.send(topic, key, similarity)
+        kafkaTemplate.send(topic, similarity)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("Failed to send similarity: {}-{}",

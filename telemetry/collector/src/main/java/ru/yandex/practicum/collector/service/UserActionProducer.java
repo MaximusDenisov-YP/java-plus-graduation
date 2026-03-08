@@ -18,9 +18,7 @@ public class UserActionProducer {
     private String topic;
 
     public void send(UserActionAvro action) {
-        String key = String.valueOf(action.getEventId());
-
-        userActionKafkaTemplate.send(topic, key, action)
+        userActionKafkaTemplate.send(topic, action)
                 .whenComplete((result, ex) -> {
                     if (ex != null) {
                         log.error("Failed to send user action to Kafka. userId={}, eventId={}, actionType={}",
